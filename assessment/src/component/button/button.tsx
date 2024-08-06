@@ -7,7 +7,7 @@ interface ButtonProps {
   children: React.ReactNode;
 }
 
-const CustomButton: React.FC<ButtonProps> = ({
+export const CustomButton: React.FC<ButtonProps> = ({
   onClick,
   disabled,
   children,
@@ -19,4 +19,3 @@ const CustomButton: React.FC<ButtonProps> = ({
   );
 };
 
-export default CustomButton;
