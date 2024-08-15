@@ -1,12 +1,11 @@
 import React from "react";
 import { Box } from "@mui/material";
-import {CardContainer} from "../../component";
+import { CardContainer } from "../../component";
 
 const Home: React.FC = () => {
-
   return (
     <Box>
-      <CardContainer/>
+      <CardContainer />
     </Box>
   );
 };
