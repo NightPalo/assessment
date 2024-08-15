@@ -17,3 +17,10 @@ export const secoundCardContent = {
   content7: "ถ้าพร้อมแล้วมาเริ่มกันเลย",
   button: "เริ่มเดินทาง",
 };
+
+export const question = {
+  title: "เธอเปิดประตูเข้ามาในห้องที่ xx",
+  subTitle: "เธอสนใจทำอะไรเป็นอันดับแรก?",
+  yesButton: "ได้",
+  noButtonButton: "ไม่ได้",
+};
