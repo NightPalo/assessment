@@ -10,7 +10,7 @@ export const CardContainer: React.FC = () => {
   return (
     <Card sx={{ minWidth: 600, minHeight: 500 }} style={{ borderRadius: 40 }}>
       <CardContent style={{ paddingTop: 100 }}>
-        <Typography gutterBottom variant="h5" component="div">
+        <Typography gutterBottom variant="h4">
           โลมาเป็นปลาหรือไม่
         </Typography>
       </CardContent>
@@ -22,11 +22,11 @@ export const CardContainer: React.FC = () => {
           padding: 100,
         }}
       >
-        <Button variant="contained" style={{ margin: 20 }}>
-          ใช่
+        <Button variant="contained" style={{ margin: 20, minWidth: 100 }}>
+          <Typography variant="h6">ใช่</Typography>
         </Button>
-        <Button variant="contained" style={{ margin: 20 }}>
-          ไม่ใช่
+        <Button variant="contained" style={{ margin: 20, minWidth: 100 }}>
+          <Typography variant="h6">ไม่ใช่</Typography>
         </Button>
       </CardActions>
     </Card>
