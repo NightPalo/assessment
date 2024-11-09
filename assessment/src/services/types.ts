@@ -20,3 +20,25 @@ export type AssessmentQuestion = {
     answer2Id: string;
     answer2Title: string;
 }
+//-----------------------------------------//
+export type ClientDetail = {
+  gender: string;
+  age: number;
+}
+
+export type Answer = {
+  questionId: string;
+  questionText: string;
+  id: string;
+  text: string;
+  startTime: string;
+  endTime: string;
+}
+
+export type SubmitAnswer = {
+  deviceDetail: string;
+  clientDetail: ClientDetail;
+  answers: Answer[];
+  startTime: string;
+  endTime: string;
+}
