@@ -1,11 +1,12 @@
 import axios from "axios";
-import {QuestionResponse} from "./types.ts";
+import { QuestionResponse, SubmitAnswer } from "./types.ts";
 
-export const getQuestion = async () => {
+// ฟังก์ชันดึงข้อมูลคำถาม (GET)
+export const getQuestion = async (): Promise<QuestionResponse[] | undefined> => {
     try {
         const response = await axios.get("http://jenkins.thddns.net:4551/api/v1/form/questions");
         if (response.status === 200) {
-            console.log(response.data)
+            console.log(response.data);
             return response.data as QuestionResponse[];
         } else {
             console.error("Error: Unexpected response status", response.status);
@@ -15,16 +16,17 @@ export const getQuestion = async () => {
     }
 };
 
-export const postAnswer = async () => {
+// ฟังก์ชันส่งคำตอบแบบทดสอบ (POST)
+export const postAnswer = async (data: SubmitAnswer) => {
     try {
-        const response = await axios.get("http://jenkins.thddns.net:4551/api/v1/personality/assessment");
+        const response = await axios.post("http://jenkins.thddns.net:4551/api/v1/personality/assessment", data);
         if (response.status === 200) {
-            console.log(response.data)
-            return response.data as QuestionResponse[];
+            console.log("Successfully submitted answers:", response.data);
+            return response.data;
         } else {
             console.error("Error: Unexpected response status", response.status);
         }
     } catch (error) {
-        console.error("Error fetching questions:", error);
+        console.error("Error submitting answers:", error);
     }
 };
