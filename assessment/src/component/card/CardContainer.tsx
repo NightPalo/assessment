@@ -49,14 +49,6 @@ export const CardContainer: React.FC = () => {
     }
   };
 
-  const handleNextOnboard = () => {
-    if (selectedAnswer) {
-      setIsOnBoard(onboard + 1);
-      setSelectedAnswer(null);
-    } else {
-      console.error("Please select an answer before proceeding.");
-    }
-  };
 
   const submitAssessment = async () => {
     const endTime = formatTime(new Date());
