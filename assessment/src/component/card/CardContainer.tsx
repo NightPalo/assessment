@@ -4,7 +4,7 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import { fircardContent, question, secoundCardContent } from "./cardContent";
+import { fircardContent, secoundCardContent } from "./cardContent";
 import { Box } from "@mui/material";
 import { getQuestion, postAnswer } from "../../services/question.ts";
 import { Answer, AssessmentQuestion, QuestionResponse, SubmitAnswer } from "../../services/types.ts";
@@ -14,8 +14,8 @@ const formatTime = (date: Date) => {
   const hours = String(date.getUTCHours()).padStart(2, '0');
   const minutes = String(date.getUTCMinutes()).padStart(2, '0');
   const seconds = String(date.getUTCSeconds()).padStart(2, '0');
-  const milliseconds = String(date.getMilliseconds()).padStart(3, '0'); // Get milliseconds with 3 digits
-  return `${hours}:${minutes}:${seconds}.${milliseconds.padEnd(6, '0')}`; // Padding milliseconds to 6 digits
+  const milliseconds = String(date.getMilliseconds()).padStart(3, '0');
+  return `${hours}:${minutes}:${seconds}.${milliseconds.padEnd(6, '0')}`;
 };
 
 export const CardContainer: React.FC = () => {
@@ -28,19 +28,25 @@ export const CardContainer: React.FC = () => {
   const [startTime, setStartTime] = useState<string | null>(null);
 
   const handleAnswerSelect = (questionId: string, title: string, answerId: string, answerText: string) => {
-    const endTime = formatTime(new Date()); // ใช้เวลาปัจจุบันเพื่อเป็น endTime
+    const endTime = formatTime(new Date());
     const answer: Answer = {
       questionId: questionId,
       questionText: title,
       id: answerId,
       text: answerText,
-      startTime: startTime || formatTime(new Date()), // ถ้า startTime ยังไม่ถูกตั้งค่า ให้ใช้เวลาปัจจุบัน
-      endTime: endTime,  // ใช้เวลาปัจจุบันเป็น endTime
+      startTime: startTime || formatTime(new Date()),
+      endTime: endTime,
     };
 
     setSelectedAnswer(answerId);
     setUserAnswersList((prevAnswers) => [...prevAnswers, answer]);
-    setCurrentQuestionIndex(currentQuestionIndex + 1);
+    const newIndex = currentQuestionIndex + 1;
+
+    if (newIndex >= (assessment?.length || 0)) {
+      submitAssessment();  // เรียกใช้ submitAssessment ตอนจบคำถามทั้งหมด
+    } else {
+      setCurrentQuestionIndex(newIndex);
+    }
   };
 
   const handleNextOnboard = () => {
@@ -53,12 +59,12 @@ export const CardContainer: React.FC = () => {
   };
 
   const submitAssessment = async () => {
-    const endTime = formatTime(new Date()); // บันทึกเวลาสิ้นสุด
+    const endTime = formatTime(new Date());
     const submitData: SubmitAnswer = {
       deviceDetail: "Device Information Placeholder",
       clientDetail: { gender: "", age: 0 },
       answers: userAnswersList,
-      startTime: startTime || formatTime(new Date()),  // ถ้า startTime ยังไม่ถูกตั้งค่า ให้ใช้เวลาปัจจุบัน
+      startTime: startTime || formatTime(new Date()),
       endTime: endTime,
     };
 
@@ -74,18 +80,11 @@ export const CardContainer: React.FC = () => {
       setQuestions(data);
       if (data) {
         setAssessment(mapQuestions(data));
-        // ตั้งค่า startTime เมื่อคำถามถูกโหลด
-        setStartTime(formatTime(new Date())); // ใช้เวลาปัจจุบันเป็น startTime
+        setStartTime(formatTime(new Date()));
       }
     };
     fetchQuestions();
   }, []);
-
-  useEffect(() => {
-    if (currentQuestionIndex >= (assessment?.length || 0)) {
-      submitAssessment();
-    }
-  }, [currentQuestionIndex]);
 
   const mapQuestions = (assessment: QuestionResponse[] | undefined): AssessmentQuestion[] | undefined => {
     if (!assessment) {

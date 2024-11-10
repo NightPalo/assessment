@@ -30,3 +30,17 @@ export const postAnswer = async (data: SubmitAnswer) => {
         console.error("Error submitting answers:", error);
     }
 };
+
+// In services/question.ts
+
+export const getResult = async (assessmentId: string) => {
+    try {
+      const response = await fetch(`http://jenkins.thddns.net:4551/api/v1/personality/assessment/${assessmentId}/result`);
+      if (!response.ok) throw new Error("Failed to fetch result");
+      return await response.json();
+    } catch (error) {
+      console.error("Error in getResult:", error);
+      throw error;
+    }
+  };
+  
