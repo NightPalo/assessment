@@ -9,15 +9,6 @@ import { Box } from "@mui/material";
 import { getQuestion, postAnswer } from "../../services/question.ts";
 import { Answer, AssessmentQuestion, QuestionResponse, SubmitAnswer } from "../../services/types.ts";
 
-// ฟังก์ชันสำหรับแปลงเวลาเป็นรูปแบบ "HH:mm:ss.SSSSSS"
-const formatTime = (date: Date) => {
-  const hours = String(date.getUTCHours()).padStart(2, '0');
-  const minutes = String(date.getUTCMinutes()).padStart(2, '0');
-  const seconds = String(date.getUTCSeconds()).padStart(2, '0');
-  const milliseconds = String(date.getMilliseconds()).padStart(3, '0'); // Get milliseconds with 3 digits
-  return `${hours}:${minutes}:${seconds}.${milliseconds.padEnd(6, '0')}`; // Padding milliseconds to 6 digits
-};
-
 export const CardContainer: React.FC = () => {
   const [onboard, setIsOnBoard] = useState<number>(1);
   const [questions, setQuestions] = useState<QuestionResponse[]>();
@@ -28,14 +19,15 @@ export const CardContainer: React.FC = () => {
   const [startTime, setStartTime] = useState<string | null>(null);
 
   const handleAnswerSelect = (questionId: string, title: string, answerId: string, answerText: string) => {
-    const endTime = formatTime(new Date()); // ใช้เวลาปัจจุบันเพื่อเป็น endTime
+    // Set the start time for the answer selection
+    const endTime = new Date().toISOString(); // Set the actual end time when the answer is selected
     const answer: Answer = {
       questionId: questionId,
       questionText: title,
       id: answerId,
       text: answerText,
-      startTime: startTime || formatTime(new Date()), // ถ้า startTime ยังไม่ถูกตั้งค่า ให้ใช้เวลาปัจจุบัน
-      endTime: endTime,  // ใช้เวลาปัจจุบันเป็น endTime
+      startTime: startTime || new Date().toISOString(), // If startTime is not set, use the current time
+      endTime: endTime,  // Use the actual end time of the answer selection
     };
 
     setSelectedAnswer(answerId);
@@ -53,12 +45,12 @@ export const CardContainer: React.FC = () => {
   };
 
   const submitAssessment = async () => {
-    const endTime = formatTime(new Date()); // บันทึกเวลาสิ้นสุด
+    const endTime = new Date().toISOString(); // Record the final end time
     const submitData: SubmitAnswer = {
-      deviceDetail: "Device Information Placeholder",
-      clientDetail: { gender: "", age: 0 },
+      deviceDetail: "Device Information Placeholder", // Add device info
+      clientDetail: { gender: "", age: 0 },          // Add client info
       answers: userAnswersList,
-      startTime: startTime || formatTime(new Date()),  // ถ้า startTime ยังไม่ถูกตั้งค่า ให้ใช้เวลาปัจจุบัน
+      startTime: startTime || new Date().toISOString(),  // If startTime is not set, use the current time
       endTime: endTime,
     };
 
@@ -74,8 +66,8 @@ export const CardContainer: React.FC = () => {
       setQuestions(data);
       if (data) {
         setAssessment(mapQuestions(data));
-        // ตั้งค่า startTime เมื่อคำถามถูกโหลด
-        setStartTime(formatTime(new Date())); // ใช้เวลาปัจจุบันเป็น startTime
+        // Set the start time when the first question is loaded
+        setStartTime(new Date().toISOString());
       }
     };
     fetchQuestions();
